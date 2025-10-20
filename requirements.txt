@@ -1,0 +1,10 @@
+praw 
+google-generativeai 
+python-dotenv
+streamlit
+pandas
+plotly
+wordcloud
+matplotlib
+
+
