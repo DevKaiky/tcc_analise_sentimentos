@@ -6,5 +6,8 @@ pandas
 plotly
 wordcloud
 matplotlib
-
-
+openpyxl
+pytest
+openpyxl
+pytest
+pytest-cov
