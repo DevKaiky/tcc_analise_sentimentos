@@ -86,8 +86,26 @@ def preparar_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 # --- Funcoes de Exportacao ---
 
 def gerar_relatorio_csv(df: pd.DataFrame) -> bytes:
-    """Gera arquivo CSV para download."""
-    return df.to_csv(index=False).encode('utf-8')
+    """
+    Gera arquivo CSV para download com formatação apropriada.
+
+    Utiliza UTF-8 com BOM para compatibilidade com Excel e outros programas.
+    Usa ponto e vírgula como separador para evitar conflitos com vírgulas no texto.
+    """
+    # Seleciona as colunas principais para exportação
+    colunas_exportacao = ['id', 'texto', 'data', 'sentimento', 'emocao', 'topico', 'entidades', 'aspectos']
+    df_export = df[colunas_exportacao].copy()
+
+    # Gera CSV com UTF-8 BOM e separador ponto e vírgula
+    csv_string = df_export.to_csv(
+        index=False,
+        sep=';',
+        encoding='utf-8-sig',  # UTF-8 com BOM para compatibilidade com Excel
+        lineterminator='\n',
+        quoting=1  # QUOTE_ALL - envolve todos os campos em aspas
+    )
+
+    return csv_string.encode('utf-8-sig')
 
 
 def gerar_relatorio_excel(df: pd.DataFrame, metricas: dict, palavra_chave: str) -> bytes:
