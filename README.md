@@ -33,28 +33,24 @@ Este projeto implementa um pipeline completo de análise de sentimentos que:
 ## Estrutura do Projeto
 
 ```
-projeto/
-├── config/                  # Configurações
-│   ├── __init__.py
-│   ├── settings.py         # Variáveis de ambiente
-│   └── logging_config.py   # Sistema de logs
-├── core/                    # Módulos principais
-│   ├── __init__.py
-│   ├── database.py         # Operações de banco de dados
-│   ├── coletar_dados.py    # Coleta do Reddit
-│   └── analise_sentimento.py  # Análise com IA
-├── tests/                   # Testes unitários
-│   ├── __init__.py
+.
+├── config/                   # Configurações
+│   ├── settings.py           # Variáveis de ambiente e validação
+│   └── logging_config.py     # Sistema de logs
+├── core/                     # Módulos principais
+│   ├── database.py           # Operações de banco de dados (SQLite)
+│   ├── coletar_dados.py      # Coleta do Reddit (PRAW)
+│   └── analise_sentimento.py # Análise com IA (Gemini)
+├── testes/                   # Testes unitários (pytest)
 │   ├── conftest.py
 │   ├── test_database.py
 │   ├── test_analyzer.py
 │   └── test_config.py
-├── logs/                    # Arquivos de log (gerado)
-├── dashboard.py             # Interface Streamlit
-├── main.py                  # Script de teste
-├── requirements.txt         # Dependências
-├── .env.example            # Template de configuração
-└── README.md               # Este arquivo
+├── dashboard.py              # Interface Streamlit
+├── main.py                   # Pipeline de coleta + análise
+├── analise_estatistica.py    # Validação: compara a IA com a rotulagem manual
+├── validacao_manual.csv      # Amostra rotulada à mão para a validação
+└── requirements.txt          # Dependências
 ```
 
 ## Instalação
@@ -115,10 +111,20 @@ streamlit run dashboard.py
 
 Acesse `http://localhost:8501` no navegador.
 
-### Script de Teste
+### Pipeline de coleta e análise
 
 ```bash
 python main.py
+```
+
+### Validação estatística
+
+Compara as classificações da IA com uma amostra rotulada manualmente
+(`validacao_manual.csv`) e imprime acurácia, matriz de confusão e
+`classification_report`:
+
+```bash
+python analise_estatistica.py
 ```
 
 ## Configuração
@@ -140,13 +146,13 @@ python main.py
 Execute os testes com:
 
 ```bash
-pytest tests/ -v
+pytest testes/ -v
 ```
 
 Para ver cobertura:
 
 ```bash
-pytest tests/ -v --cov=core --cov=config
+pytest testes/ -v --cov=core --cov=config
 ```
 
 ## Arquitetura
@@ -169,14 +175,6 @@ O sistema classifica cada texto em:
 - **Entidades**: nomes próprios identificados
 - **Aspectos**: elementos específicos mencionados
 
-## Contribuindo
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
-
 ## Limitações Conhecidas
 
 - Taxa de requisições limitada pela API do Reddit
@@ -192,14 +190,10 @@ O sistema classifica cada texto em:
 - [ ] API REST para integração
 - [ ] Containerização com Docker
 
-## Licença
+## Contexto acadêmico
 
-Este projeto foi desenvolvido para fins acadêmicos como parte de um Trabalho de Conclusão de Curso.
+Projeto desenvolvido como Trabalho de Conclusão de Curso. Uso livre para fins de estudo.
 
 ## Autor
 
-Desenvolvido para TCC de Análise de Sentimentos.
-
----
-
-*Última atualização: 2024*
+[@DevKaiky](https://github.com/DevKaiky)

@@ -12,3 +12,4 @@ sentimentos.db
 
 venv/
 .venv/
+.vscode/
